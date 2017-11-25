@@ -12,7 +12,7 @@ public interface EquipmentControlService {
 	@GET
 	@Path("/start/{IP}/{Mask}")
 	@Produces(MediaType.APPLICATION_JSON)
-	String start(@PathParam("IP") String ip,@PathParam("Mask") int mask);
+	void start(@PathParam("IP") String ip,@PathParam("Mask") int mask);
 	
 	@GET
 	@Path("/status/{IP}")
