@@ -1,5 +1,7 @@
 package br.dm110.maury.project.mdb;
 
+import java.sql.Date;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
@@ -53,6 +55,12 @@ public class EquipmentControlMDB implements MessageListener{
 		Equipment equipment = new Equipment();
 		equipment.setIp(equipmentTO.getIp());
 		equipment.setStatus(equipmentTO.getStatus());
+		
+		java.util.Calendar cal = java.util.Calendar.getInstance();
+		java.util.Date utilDate = cal.getTime();
+		java.sql.Timestamp sqlDate = new java.sql.Timestamp(utilDate.getTime());
+		
+		equipment.setCheck_date(sqlDate);
 		equipmentDAO.insert(equipment);
 		
 	}

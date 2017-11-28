@@ -1,5 +1,7 @@
 package br.dm110.maury.project.entities;
 
+import java.sql.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,7 @@ public class Equipment {
 	
 	private String ip;
 	private String status;
+	private java.sql.Timestamp check_date;
 	
 	public Integer getId() {
 		return id;
@@ -34,7 +37,12 @@ public class Equipment {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
+	public java.sql.Timestamp getCheck_date() {
+		return check_date;
+	}
+	public void setCheck_date(java.sql.Timestamp check_date) {
+		this.check_date = check_date;
+	}
 
 
 
