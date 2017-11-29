@@ -1,6 +1,9 @@
 package br.dm110.maury.project.dao;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
+import javax.json.Json;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -15,8 +18,16 @@ public class EquipmentDAO {
 
 	public String getStatus(String ip)
 	{
-		return "Entrouuuuu";
-		//return em.createQuery("from Equipment p where ip="+ip);
+	String status = "{ \"status\": \"Equipamento não encontrado\"}";
+	List<Equipment> equipmentList = 
+			 em.createQuery("from Equipment e where e.ip=:ip order by e.check_date desc",Equipment.class)
+			.setParameter("ip", ip)
+			.getResultList();
+			
+	if(equipmentList.size()>0){
+			status = "{ \"status\":\""+equipmentList.get(0).getStatus().trim()+"\"}";
+	}
+	return status;
 		
 	}
 	

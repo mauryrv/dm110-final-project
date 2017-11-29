@@ -1,5 +1,9 @@
 package br.dm110.maury.project.beans;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Local;
@@ -15,6 +19,8 @@ import javax.jms.Session;
 
 import br.dm110.maury.project.apiEntities.EquipmentTO;
 import br.dm110.maury.project.dao.EquipmentDAO;
+import br.dm110.maury.project.entities.Equipment;
+import br.dm110.maury.project.helperBean.HelperBean;
 import br.dm110.maury.project.interfaces.EquipmentControlLocal;
 import br.dm110.maury.project.interfaces.EquipmentControlRemote;
 
@@ -32,8 +38,21 @@ public class EquipmentControlBean implements EquipmentControlLocal, EquipmentCon
 	private Queue queue;
 	
 	@Override
-	public void insertEquipmentInfo(EquipmentTO equipment) {
+	public void insertEquipmentInfo(List<String> ips){//) {
 		
+		for (String ip : ips) {
+			boolean resultPing = false;
+			String status = "Ativo";
+			EquipmentTO equipment = new EquipmentTO();
+			equipment.setIp(ip);
+			resultPing = HelperBean.execPing(ip);
+			if(resultPing)
+				status = "Ativo";
+			else
+				status = "Inativo";
+			
+			equipment.setStatus(status);
+
 		try (Connection connection = connectionFactory.createConnection();
 				Session session = connection.createSession();
 				MessageProducer producer = session.createProducer(queue);) {
@@ -43,7 +62,7 @@ public class EquipmentControlBean implements EquipmentControlLocal, EquipmentCon
 		} catch (JMSException e) {
 			throw new RuntimeException(e);
 		}
-
+		}
 		
 	}
 

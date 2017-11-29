@@ -1,11 +1,14 @@
 package br.dm110.maury.project.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 
 import br.dm110.maury.project.api.EquipmentControlService;
 import br.dm110.maury.project.apiEntities.EquipmentTO;
-import br.dm110.maury.project.helper.Helper;
+import br.dm110.maury.project.helperImpl.HelperImpl;
 import br.dm110.maury.project.interfaces.EquipmentControlRemote;
 
 
@@ -17,20 +20,21 @@ public class EquipmentControlImpl implements EquipmentControlService {
 	@Override
 	public void start(String ip, int mask) {
 		
-		String[] ipList = Helper.generateIps(ip, mask);
-		boolean resultPing = false;
-		String status = "Ativo";
+		String[] ipList = HelperImpl.generateIps(ip, mask);
+		List<String> ips = new ArrayList<>();
+		
 		for (String ipGen : ipList) {
-			EquipmentTO equipment = new EquipmentTO();
-			equipment.setIp(ipGen);
-			resultPing = Helper.execPing(ipGen);
-			if(resultPing)
-				status = "Ativo";
-			else
-				status = "Inativo";
+			ips.add(ipGen);
 			
-			equipment.setStatus(status);
-			equipmentControlBean.insertEquipmentInfo(equipment);
+			if(ips.size()==10){
+				equipmentControlBean.insertEquipmentInfo(ips);
+				ips = new ArrayList<>();
+			}
+
+		}
+		
+		if(ips.size()>0){
+			equipmentControlBean.insertEquipmentInfo(ips);
 		}
 		
 	}

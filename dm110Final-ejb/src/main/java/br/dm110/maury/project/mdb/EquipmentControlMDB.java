@@ -1,6 +1,7 @@
 package br.dm110.maury.project.mdb;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
@@ -13,6 +14,7 @@ import javax.jms.ObjectMessage;
 import br.dm110.maury.project.apiEntities.EquipmentTO;
 import br.dm110.maury.project.dao.EquipmentDAO;
 import br.dm110.maury.project.entities.Equipment;
+import br.dm110.maury.project.helperBean.HelperBean;
 
 @MessageDriven(activationConfig = {
 		@ActivationConfigProperty(propertyName = "destinationType",propertyValue = "javax.jms.Queue"),
@@ -30,8 +32,26 @@ public class EquipmentControlMDB implements MessageListener{
 				ObjectMessage objMessage = (ObjectMessage) message;
 				Object object = objMessage.getObject();
 				if(object instanceof EquipmentTO){
+					
+				//List<String> ips = (List<String>) object;
 				EquipmentTO equipmentTO = (EquipmentTO) object;
-				saveProduct(equipmentTO);
+				
+				/*for (String ip : ips) {
+					boolean resultPing = false;
+					String status = "Ativo";
+					EquipmentTO equipment = new EquipmentTO();
+					equipment.setIp(ip);
+					resultPing = HelperBean.execPing(ip);
+					if(resultPing)
+						status = "Ativo";
+					else
+						status = "Inativo";
+					
+					equipment.setStatus(status);
+				}*/
+				
+					saveProduct(equipmentTO);
+				
 
 				}
 				else

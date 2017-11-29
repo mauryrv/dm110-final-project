@@ -11,7 +11,6 @@ public interface EquipmentControlService {
 	
 	@GET
 	@Path("/start/{IP}/{Mask}")
-	@Produces(MediaType.APPLICATION_JSON)
 	void start(@PathParam("IP") String ip,@PathParam("Mask") int mask);
 	
 	@GET
