@@ -9,7 +9,6 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import br.dm110.maury.project.apiEntities.EquipmentTO;
 import br.dm110.maury.project.dao.EquipmentDAO;
 import br.dm110.maury.project.entities.Equipment;
 import br.dm110.maury.project.entities.ListHelper;
@@ -37,7 +36,7 @@ public class EquipmentControlMDB implements MessageListener{
 				for (String ip : ipList.getIps()) {
 					boolean resultPing = false;
 					String status = "Ativo";
-					EquipmentTO equipment = new EquipmentTO();
+					Equipment equipment = new Equipment();
 					equipment.setIp(ip);
 					resultPing = HelperBean.execPing(ip);
 					if(resultPing)
@@ -45,6 +44,11 @@ public class EquipmentControlMDB implements MessageListener{
 					else
 						status = "Inativo";
 					
+					java.util.Calendar cal = java.util.Calendar.getInstance();
+					java.util.Date utilDate = cal.getTime();
+					java.sql.Timestamp sqlDate = new java.sql.Timestamp(utilDate.getTime());
+					
+					equipment.setCheck_date(sqlDate);
 					equipment.setStatus(status);
 					saveProduct(equipment);
 				}
@@ -66,16 +70,7 @@ public class EquipmentControlMDB implements MessageListener{
 
 	}
 	
-	private void saveProduct(EquipmentTO equipmentTO) {
-		Equipment equipment = new Equipment();
-		equipment.setIp(equipmentTO.getIp());
-		equipment.setStatus(equipmentTO.getStatus());
-		
-		java.util.Calendar cal = java.util.Calendar.getInstance();
-		java.util.Date utilDate = cal.getTime();
-		java.sql.Timestamp sqlDate = new java.sql.Timestamp(utilDate.getTime());
-		
-		equipment.setCheck_date(sqlDate);
+	private void saveProduct(Equipment equipment) {
 		equipmentDAO.insert(equipment);
 		
 	}
