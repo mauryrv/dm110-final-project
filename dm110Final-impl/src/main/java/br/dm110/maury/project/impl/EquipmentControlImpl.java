@@ -7,7 +7,6 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 
 import br.dm110.maury.project.api.EquipmentControlService;
-import br.dm110.maury.project.apiEntities.EquipmentTO;
 import br.dm110.maury.project.helperImpl.HelperImpl;
 import br.dm110.maury.project.interfaces.EquipmentControlRemote;
 

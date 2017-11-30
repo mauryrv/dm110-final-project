@@ -1,8 +1,5 @@
 package br.dm110.maury.project.helperImpl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Scanner;
 
 public class HelperImpl {
 

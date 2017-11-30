@@ -1,7 +1,5 @@
 package br.dm110.maury.project.mdb;
 
-import java.sql.Date;
-import java.util.List;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
@@ -14,6 +12,7 @@ import javax.jms.ObjectMessage;
 import br.dm110.maury.project.apiEntities.EquipmentTO;
 import br.dm110.maury.project.dao.EquipmentDAO;
 import br.dm110.maury.project.entities.Equipment;
+import br.dm110.maury.project.entities.ListHelper;
 import br.dm110.maury.project.helperBean.HelperBean;
 
 @MessageDriven(activationConfig = {
@@ -31,12 +30,11 @@ public class EquipmentControlMDB implements MessageListener{
 			if(message instanceof ObjectMessage){
 				ObjectMessage objMessage = (ObjectMessage) message;
 				Object object = objMessage.getObject();
-				if(object instanceof EquipmentTO){
+				if(object instanceof ListHelper){
 					
-				//List<String> ips = (List<String>) object;
-				EquipmentTO equipmentTO = (EquipmentTO) object;
+				ListHelper ipList = (ListHelper) object;
 				
-				/*for (String ip : ips) {
+				for (String ip : ipList.getIps()) {
 					boolean resultPing = false;
 					String status = "Ativo";
 					EquipmentTO equipment = new EquipmentTO();
@@ -48,15 +46,13 @@ public class EquipmentControlMDB implements MessageListener{
 						status = "Inativo";
 					
 					equipment.setStatus(status);
-				}*/
+					saveProduct(equipment);
+				}
 				
-					saveProduct(equipmentTO);
-				
-
 				}
 				else
 				{
-					System.out.println("Mensagem não contem um status de equipamento!!!");
+					System.out.println("Mensagem não contem lista de ips!!!");
 				}
 			
 			}
@@ -64,11 +60,10 @@ public class EquipmentControlMDB implements MessageListener{
 				System.out.println("Mensagem não é um objeto!!!");
 			}
 		} catch (JMSException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 	
 	private void saveProduct(EquipmentTO equipmentTO) {
